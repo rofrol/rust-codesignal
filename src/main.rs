@@ -55,10 +55,10 @@ fn makeArrayConsecutive(statues: Vec<i32>) -> i32 {
 }
 
 fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
-    if sequence.len() == 2 {
+    if sequence.len() == 2
+        || sequence.len() == 3 && (sequence[1] > sequence[0] || sequence[2] > sequence[1])
+    {
         true
-    } else if sequence.len() == 3 {
-        sequence[1] > sequence[0] || sequence[2] > sequence[1]
     } else {
         let mut no_increase = sequence[1] <= sequence[0];
         for i in 2..(sequence.len() - 1) {
@@ -80,6 +80,21 @@ fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
     }
 }
 
+fn matrixElementsSum(matrix: Vec<Vec<i32>>) -> i32 {
+    let mut sum = 0;
+    for j in 0..matrix[0].len() {
+        for i in 0..matrix.len() {
+            if matrix[i][j] == 0 {
+                break;
+            }
+            sum += matrix[i][j];
+            //println!("matrix[{}][{}]: {}", i, j, matrix[i][j]);
+        }
+        //println!("");
+    }
+    sum
+}
+
 #[test]
 fn test_almostIncreasingSequence() {
     let samples: Vec<(Vec<i32>, bool)> = vec![
@@ -96,5 +111,18 @@ fn test_almostIncreasingSequence() {
     for (inputArray, expected) in samples {
         println!("\n{:?}", inputArray);
         assert_eq!(expected, almostIncreasingSequence(inputArray));
+    }
+}
+
+#[test]
+fn test_matrixElementsSum() {
+    let samples: Vec<(Vec<Vec<i32>>, i32)> = vec![(
+        vec![vec![0, 1, 1, 2], vec![0, 5, 0, 0], vec![2, 0, 3, 3]],
+        9,
+    )];
+
+    for (inputArray, expected) in samples {
+        println!("\n{:?}", inputArray);
+        assert_eq!(expected, matrixElementsSum(inputArray));
     }
 }
