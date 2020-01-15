@@ -62,8 +62,8 @@ fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
     } else {
         let mut no_increase = sequence[1] <= sequence[0];
         for i in 2..(sequence.len() - 1) {
-            println!("sequence[{}] {}", i, sequence[i]);
-            println!("no_increase {:?}", no_increase);
+            //println!("sequence[{}] {}", i, sequence[i]);
+            //println!("no_increase {:?}", no_increase);
             if sequence[i] <= sequence[i - 1] {
                 if no_increase
                     || sequence[i] <= sequence[i - 2] && sequence[i + 1] <= sequence[i - 1]
