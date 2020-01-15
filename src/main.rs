@@ -95,6 +95,19 @@ fn matrixElementsSum(matrix: Vec<Vec<i32>>) -> i32 {
     sum
 }
 
+// Also interesting solution by csteffen https://app.codesignal.com/arcade/intro/level-2/xskq4ZxLyqQMCLshr/solutions?solutionId=dix4tb3TBg8i4Nw7A
+fn matrixElementsSum2(matrix: Vec<Vec<i32>>) -> i32 {
+    (0..matrix[0].len())
+        .map(|col| {
+            matrix
+                .iter()
+                .map(|r| r[col])
+                .take_while(|&p| p > 0)
+                .sum::<i32>()
+        })
+        .sum()
+}
+
 #[test]
 fn test_almostIncreasingSequence() {
     let samples: Vec<(Vec<i32>, bool)> = vec![
