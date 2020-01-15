@@ -82,13 +82,13 @@ fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
 
 fn matrixElementsSum(matrix: Vec<Vec<i32>>) -> i32 {
     let mut sum = 0;
-    for j in 0..matrix[0].len() {
-        for i in 0..matrix.len() {
-            if matrix[i][j] == 0 {
+    for col in 0..matrix[0].len() {
+        for row in 0..matrix.len() {
+            if matrix[row][col] == 0 {
                 break;
             }
-            sum += matrix[i][j];
-            //println!("matrix[{}][{}]: {}", i, j, matrix[i][j]);
+            sum += matrix[row][col];
+            //println!("matrix[{}][{}]: {}", row, col, matrix[row][col]);
         }
         //println!("");
     }
