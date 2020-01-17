@@ -67,12 +67,12 @@ fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
             if sequence[i] <= sequence[i - 1] {
                 if no_increase
                     || sequence[i] <= sequence[i - 2] && sequence[i + 1] <= sequence[i - 1]
-                    || sequence[i + 1] <= sequence[i]
+                    || i == (sequence.len() - 2) && sequence[i + 1] <= sequence[i]
                 {
                     return false;
                 }
                 no_increase = true;
-            } else if no_increase && sequence[i + 1] <= sequence[i] {
+            } else if i == (sequence.len() - 2) && no_increase && sequence[i + 1] <= sequence[i] {
                 return false;
             }
         }
