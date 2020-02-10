@@ -55,10 +55,10 @@ fn makeArrayConsecutive(statues: Vec<i32>) -> i32 {
 }
 
 fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
-    if sequence.len() == 2
-        || sequence.len() == 3 && (sequence[1] > sequence[0] || sequence[2] > sequence[1])
-    {
+    if sequence.len() < 3 {
         true
+    } else if sequence.len() == 3 {
+        sequence[1] > sequence[0] || sequence[2] > sequence[1] || sequence[2] > sequence[0]
     } else {
         let mut no_increase = sequence[1] <= sequence[0];
         for i in 2..(sequence.len() - 1) {
@@ -111,6 +111,10 @@ fn matrixElementsSum2(matrix: Vec<Vec<i32>>) -> i32 {
 #[test]
 fn test_almostIncreasingSequence() {
     let samples: Vec<(Vec<i32>, bool)> = vec![
+        (vec![], true),
+        (vec![1], true),
+        (vec![1, 1], true),
+        (vec![1, 1, 1], false),
         (vec![3, 6, -2, -5, 7, 3], false),
         (vec![1, 3, 2, 1], false),
         (vec![1, 2, 1, 2], false),
