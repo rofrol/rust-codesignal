@@ -81,6 +81,35 @@ fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
     }
 }
 
+fn almostIncreasingSequenceItertools(sequence: Vec<i32>) -> bool {
+    if sequence.len() < 3 {
+        true
+    } else if sequence.len() == 3 {
+        sequence[1] > sequence[0] || sequence[2] > sequence[1] || sequence[2] > sequence[0]
+    } else {
+        let mut no_increase = sequence[1] <= sequence[0];
+        use itertools::Itertools;
+        for (prevprev, prev, curr, next) in (2..(sequence.len() - 1)).tuple_windows() {
+            println!(
+                "prevprev {}, prev {}, curr {}, next {}",
+                prevprev, prev, curr, next
+            );
+            println!("no_increase {:?}", no_increase);
+            if curr <= prev {
+                if no_increase || curr <= prevprev && next <= prev {
+                    return false;
+                }
+                no_increase = true;
+            }
+        }
+
+        if no_increase && sequence[sequence.len() - 1] <= sequence[sequence.len() - 2] {
+            return false;
+        }
+        true
+    }
+}
+
 fn matrixElementsSum(matrix: Vec<Vec<i32>>) -> i32 {
     let mut sum = 0;
     for col in 0..matrix[0].len() {
@@ -109,38 +138,68 @@ fn matrixElementsSum2(matrix: Vec<Vec<i32>>) -> i32 {
         .sum()
 }
 
-#[test]
-fn test_almostIncreasingSequence() {
-    let samples: Vec<(Vec<i32>, bool)> = vec![
-        (vec![], true),
-        (vec![1], true),
-        (vec![1, 1], true),
-        (vec![1, 1, 1], false),
-        (vec![3, 6, -2, -5, 7, 3], false),
-        (vec![1, 3, 2, 1], false),
-        (vec![1, 2, 1, 2], false),
-        (vec![0, -2, 5, 6], true),
-        (vec![10, 1, 2, 3, 4, 5], true),
-        (vec![40, 50, 60, 10, 20, 30], false),
-        (vec![3, 6, 5, 8, 10, 20, 15], false),
-        (vec![1, 1, 2, 3, 4, 4], false),
-    ];
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-    for (inputArray, expected) in samples {
-        println!("\n{:?}", inputArray);
-        assert_eq!(expected, almostIncreasingSequence(inputArray));
+    #[test]
+    fn test_almostIncreasingSequence() {
+        let samples: Vec<(Vec<i32>, bool)> = vec![
+            (vec![], true),
+            (vec![1], true),
+            (vec![1, 1], true),
+            (vec![1, 1, 1], false),
+            (vec![3, 6, -2, -5, 7, 3], false),
+            (vec![1, 3, 2, 1], false),
+            (vec![1, 2, 1, 2], false),
+            (vec![0, -2, 5, 6], true),
+            (vec![10, 1, 2, 3, 4, 5], true),
+            (vec![40, 50, 60, 10, 20, 30], false),
+            (vec![3, 6, 5, 8, 10, 20, 15], false),
+            (vec![1, 1, 2, 3, 4, 4], false),
+        ];
+
+        for (inputArray, expected) in samples {
+            println!("\n{:?}", inputArray);
+            assert_eq!(expected, almostIncreasingSequence(inputArray));
+        }
     }
-}
 
-#[test]
-fn test_matrixElementsSum() {
-    let samples: Vec<(Vec<Vec<i32>>, i32)> = vec![(
-        vec![vec![0, 1, 1, 2], vec![0, 5, 0, 0], vec![2, 0, 3, 3]],
-        9,
-    )];
+    #[test]
+    // when name prefix the same I need to run it with `--exact`:
+    // `cargo test test_almostIncreasingSequence -- --exact`
+    fn test_almostIncreasingSequenceItertools() {
+        let samples: Vec<(Vec<i32>, bool)> = vec![
+            (vec![], true),
+            (vec![1], true),
+            (vec![1, 1], true),
+            (vec![1, 1, 1], false),
+            (vec![3, 6, -2, -5, 7, 3], false),
+            (vec![1, 3, 2, 1], false),
+            (vec![1, 2, 1, 2], false),
+            (vec![0, -2, 5, 6], true),
+            (vec![10, 1, 2, 3, 4, 5], true),
+            (vec![40, 50, 60, 10, 20, 30], false),
+            (vec![3, 6, 5, 8, 10, 20, 15], false),
+            (vec![1, 1, 2, 3, 4, 4], false),
+        ];
 
-    for (inputArray, expected) in samples {
-        println!("\n{:?}", inputArray);
-        assert_eq!(expected, matrixElementsSum(inputArray));
+        for (inputArray, expected) in samples {
+            println!("\n{:?}", inputArray);
+            assert_eq!(expected, almostIncreasingSequenceItertools(inputArray));
+        }
+    }
+
+    #[test]
+    fn test_matrixElementsSum() {
+        let samples: Vec<(Vec<Vec<i32>>, i32)> = vec![(
+            vec![vec![0, 1, 1, 2], vec![0, 5, 0, 0], vec![2, 0, 3, 3]],
+            9,
+        )];
+
+        for (inputArray, expected) in samples {
+            println!("\n{:?}", inputArray);
+            assert_eq!(expected, matrixElementsSum(inputArray));
+        }
     }
 }
