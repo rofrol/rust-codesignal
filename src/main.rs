@@ -1,5 +1,8 @@
 #![allow(non_snake_case)]
 #![allow(dead_code)]
+
+use itertools::Itertools;
+
 fn main() {
     println!("Hello, world!");
 }
@@ -81,15 +84,21 @@ fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
     }
 }
 
+// tuple_windows clones the iterator elements so that they can be part of successive windows, this makes it most suited for iterators of references and other values that are cheap to copy.
+// https://docs.rs/itertools/0.8.2/itertools/trait.Itertools.html#method.tuple_windows
 fn almostIncreasingSequenceItertools(sequence: Vec<i32>) -> bool {
+    println!("sequence {:?}", sequence);
     if sequence.len() < 3 {
+        println!("sequence.len() < 3");
         true
     } else if sequence.len() == 3 {
+        println!("second case");
         sequence[1] > sequence[0] || sequence[2] > sequence[1] || sequence[2] > sequence[0]
     } else {
+        println!("third case");
         let mut no_increase = sequence[1] <= sequence[0];
-        use itertools::Itertools;
-        for (prevprev, prev, curr, next) in (2..(sequence.len() - 1)).tuple_windows() {
+        println!("no_increase {:?}", no_increase);
+        for (prevprev, prev, curr, next) in (&sequence).into_iter().tuple_windows() {
             println!(
                 "prevprev {}, prev {}, curr {}, next {}",
                 prevprev, prev, curr, next
@@ -166,8 +175,6 @@ mod tests {
     }
 
     #[test]
-    // when name prefix the same I need to run it with `--exact`:
-    // `cargo test test_almostIncreasingSequence -- --exact`
     fn test_almostIncreasingSequenceItertools() {
         let samples: Vec<(Vec<i32>, bool)> = vec![
             (vec![], true),
@@ -186,7 +193,8 @@ mod tests {
 
         for (inputArray, expected) in samples {
             println!("\n{:?}", inputArray);
-            assert_eq!(expected, almostIncreasingSequenceItertools(inputArray));
+            let result = almostIncreasingSequenceItertools(inputArray);
+            assert_eq!(expected, result);
         }
     }
 
