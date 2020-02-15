@@ -124,6 +124,7 @@ fn almostIncreasingSequenceItertools(sequence: Vec<i32>) -> bool {
 
 fn matrixElementsSum(matrix: Vec<Vec<i32>>) -> i32 {
     let mut sum = 0;
+    #[allow(clippy::needless_range_loop)]
     for col in 0..matrix[0].len() {
         for row in 0..matrix.len() {
             if matrix[row][col] == 0 {
