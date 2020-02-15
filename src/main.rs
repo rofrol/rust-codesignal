@@ -100,7 +100,7 @@ fn almostIncreasingSequenceItertools(sequence: Vec<i32>) -> bool {
             println!("third case");
             let mut no_increase = sequence[1] <= sequence[0];
             println!("no_increase {:?}", no_increase);
-            for (prevprev, prev, curr, next) in (&sequence).into_iter().tuple_windows() {
+            for (prevprev, prev, curr, next) in (&sequence).iter().tuple_windows() {
                 println!(
                     "prevprev {}, prev {}, curr {}, next {}",
                     prevprev, prev, curr, next
