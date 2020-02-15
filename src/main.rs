@@ -2,6 +2,7 @@
 #![allow(dead_code)]
 
 use itertools::Itertools;
+use std::cmp::Ordering;
 
 fn main() {
     println!("Hello, world!");
@@ -58,29 +59,31 @@ fn makeArrayConsecutive(statues: Vec<i32>) -> i32 {
 }
 
 fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
-    if sequence.len() < 3 {
-        true
-    } else if sequence.len() == 3 {
-        sequence[0] < sequence[1] || sequence[0] < sequence[2] || sequence[1] < sequence[2]
-    } else {
-        let mut no_increase = sequence[1] <= sequence[0];
-        for i in 2..(sequence.len() - 1) {
-            //println!("sequence[{}] {}", i, sequence[i]);
-            //println!("no_increase {:?}", no_increase);
-            if sequence[i] <= sequence[i - 1] {
-                if no_increase
-                    || sequence[i] <= sequence[i - 2] && sequence[i + 1] <= sequence[i - 1]
-                {
-                    return false;
+    match sequence.len().cmp(&3) {
+        Ordering::Less => true,
+        Ordering::Equal => {
+            sequence[0] < sequence[1] || sequence[0] < sequence[2] || sequence[1] < sequence[2]
+        }
+        Ordering::Greater => {
+            let mut no_increase = sequence[1] <= sequence[0];
+            for i in 2..(sequence.len() - 1) {
+                //println!("sequence[{}] {}", i, sequence[i]);
+                //println!("no_increase {:?}", no_increase);
+                if sequence[i] <= sequence[i - 1] {
+                    if no_increase
+                        || sequence[i] <= sequence[i - 2] && sequence[i + 1] <= sequence[i - 1]
+                    {
+                        return false;
+                    }
+                    no_increase = true;
                 }
-                no_increase = true;
             }
-        }
 
-        if no_increase && sequence[sequence.len() - 1] <= sequence[sequence.len() - 2] {
-            return false;
+            if no_increase && sequence[sequence.len() - 1] <= sequence[sequence.len() - 2] {
+                return false;
+            }
+            true
         }
-        true
     }
 }
 
@@ -88,34 +91,34 @@ fn almostIncreasingSequence(sequence: Vec<i32>) -> bool {
 // https://docs.rs/itertools/0.8.2/itertools/trait.Itertools.html#method.tuple_windows
 fn almostIncreasingSequenceItertools(sequence: Vec<i32>) -> bool {
     println!("sequence {:?}", sequence);
-    if sequence.len() < 3 {
-        println!("sequence.len() < 3");
-        true
-    } else if sequence.len() == 3 {
-        println!("second case");
-        sequence[1] > sequence[0] || sequence[2] > sequence[1] || sequence[2] > sequence[0]
-    } else {
-        println!("third case");
-        let mut no_increase = sequence[1] <= sequence[0];
-        println!("no_increase {:?}", no_increase);
-        for (prevprev, prev, curr, next) in (&sequence).into_iter().tuple_windows() {
-            println!(
-                "prevprev {}, prev {}, curr {}, next {}",
-                prevprev, prev, curr, next
-            );
+    match sequence.len().cmp(&3) {
+        Ordering::Less => true,
+        Ordering::Equal => {
+            sequence[0] < sequence[1] || sequence[0] < sequence[2] || sequence[1] < sequence[2]
+        }
+        Ordering::Greater => {
+            println!("third case");
+            let mut no_increase = sequence[1] <= sequence[0];
             println!("no_increase {:?}", no_increase);
-            if curr <= prev {
-                if no_increase || curr <= prevprev && next <= prev {
-                    return false;
+            for (prevprev, prev, curr, next) in (&sequence).into_iter().tuple_windows() {
+                println!(
+                    "prevprev {}, prev {}, curr {}, next {}",
+                    prevprev, prev, curr, next
+                );
+                println!("no_increase {:?}", no_increase);
+                if curr <= prev {
+                    if no_increase || curr <= prevprev && next <= prev {
+                        return false;
+                    }
+                    no_increase = true;
                 }
-                no_increase = true;
             }
-        }
 
-        if no_increase && sequence[sequence.len() - 1] <= sequence[sequence.len() - 2] {
-            return false;
+            if no_increase && sequence[sequence.len() - 1] <= sequence[sequence.len() - 2] {
+                return false;
+            }
+            true
         }
-        true
     }
 }
 
