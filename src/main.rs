@@ -186,7 +186,7 @@ mod tests {
             (vec![1], true),
             (vec![1, 1], true),
             (vec![1, 1, 1], false),
-            (vec![1, -1, 0], true),
+            (vec![1, -1, 0], false),
             (vec![3, 6, -2, -5, 7, 3], false),
             (vec![1, 3, 2, 1], false),
             (vec![1, 2, 1, 2], false),
